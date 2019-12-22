@@ -4,6 +4,10 @@ A script for generating print files from pixel art for various print-on-demand s
 
 The currently supported services include RedBubble, Displate, InPRNT, and Printful (selected canvas and poster products only). The RedBubble output files may be general enough to be used with other services.
 
+Copyright (c) 2019 by Kevin Houlihan
+
+License: MIT, see LICENSE for more details.
+
 ## Prerequisites
 
 The script depends on Python 3.6 (though possibly earlier versions of Python 3 will work fine), and the imaging library [Pillow](https://pillow.readthedocs.io/en/stable/index.html).
