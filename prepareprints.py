@@ -18,10 +18,15 @@ def colour(value):
     return parsed
 
 
-def _verify_destination(destination, source):
+def _canonical_destination(destination, source):
     p = Path(destination)
     if not p.is_absolute():
-        p = Path(source).joinpath(p)
+        p = Path(source).parents[0].joinpath(p)
+    return p
+
+
+def _verify_destination(destination, source):
+    p = _canonical_destination(destination, source)
     if not p.exists():
         p.mkdir()
     else:
@@ -29,8 +34,8 @@ def _verify_destination(destination, source):
             raise NotADirectoryError()
 
 
-def _verify_source(destination):
-    p = Path(destination)
+def _verify_source(source):
+    p = Path(source)
     if not p.exists():
         raise FileNotFoundError()
     else:
@@ -59,8 +64,8 @@ def _crop_to_ratio(im, ratio, retain=[]):
     retain = [] if not retain else retain
     
     portrait = im.size[0] < im.size[1]
-    l = im.size[0] if im.size[0] > im.size[1] else im.size[1]
-    s = im.size[0] if im.size[0] < im.size[1] else im.size[1]
+    l = max(im.size)
+    s = min(im.size)
 
     # The idea here is that if the image is too skinny then it will be cropped vertically
     # if it is too fat then it will be cropped horizontally. Unclear if it actually works!
@@ -93,8 +98,8 @@ def _redbubble(im, source, destination, **kwargs):
     ccw = _rotate(im, True)
 
     # Scale by a factor that puts the image over 7632x6480
-    l = im.size[0] if im.size[0] > im.size[1] else im.size[1]
-    s = im.size[0] if im.size[0] < im.size[1] else im.size[1]
+    l = max(im.size)
+    s = min(im.size)
     lf = math.ceil(7632 / l)
     sf = math.ceil(6480 / s)
     f = max(lf, sf)
@@ -111,7 +116,7 @@ def _displate(im, source, destination, retain, **kwargs):
     cropped = _crop_to_ratio(rgb, 1.4, retain)
 
     # Scale by a factor that puts the smallest side over 10000 pixels
-    s = cropped.size[0] if cropped.size[0] < cropped.size[1] else cropped.size[1]
+    s = min(cropped.size)
     f = math.ceil(10000 / s)
 
     scaled = _scale_by_factor(cropped, f)
@@ -167,7 +172,7 @@ def _printful_posters(im, source, destination, sizes, retain):
         if not sizes or any(s in parsed_sizes for s in sizes):
             cropped = _crop_to_ratio(im, ratio, retain)
             # Scale by a factor that puts the smallest side over 10000 pixels
-            s = cropped.size[0] if cropped.size[0] < cropped.size[1] else cropped.size[1]
+            s = min(cropped.size)
             f = math.ceil(10000 / s)
             scaled = _scale_by_factor(cropped, f)
             _save(scaled, source, destination, description, "png")
@@ -184,7 +189,7 @@ def _printful_posters_with_mat(im, source, destination, sizes, retain):
             ratio = inner[1] / inner[0]
             cropped = _crop_to_ratio(im, ratio, retain)
             # Scale by a factor that puts the smallest side over the minimum to achieve the desired DPI
-            s = min(cropped.size[0], cropped.size[1])
+            s = min(cropped.size)
             f = math.ceil(inner[0] * ppcm / s)
             scaled = _scale_by_factor(cropped, f)
             portrait = scaled.size[0] < scaled.size[1]
@@ -214,7 +219,7 @@ def _printful_canvases(im, source, destination, canvas_edge_type, edge_colour, l
             ratio = inner[1] / inner[0] #if im.size[0] > im.size[1] else inner[1] / inner[0]
             cropped = _crop_to_ratio(im, ratio, retain)
             # Scale by a factor that puts the smallest side over the minimum to achieve the desired DPI
-            s = min(cropped.size[0], cropped.size[1])
+            s = min(cropped.size)
             f = math.ceil(inner[0] * dpi / s)
             scaled = _scale_by_factor(cropped, f)
             portrait = scaled.size[0] < scaled.size[1]
@@ -285,8 +290,8 @@ def _inprnt(im, source, destination, **kwargs):
     # JPG or TIFF at full quality
     # Scale by a factor that puts the smallest side over 10000 pixels
     rgb = im.convert('RGB')
-    s = rgb.size[0] if rgb.size[0] < rgb.size[1] else rgb.size[1]
-    l = rgb.size[1] if rgb.size[0] < rgb.size[1] else rgb.size[0]
+    s = min(rgb.size)
+    l = max(rgb.size)
     f = math.floor(10200 / l)
     if f * s > 6600:
         f = math.floor(6600 / s)
@@ -296,7 +301,7 @@ def _inprnt(im, source, destination, **kwargs):
 
 def _save(im, source, destination, description, ext):
     ps = Path(source)
-    pd = Path(destination)
+    pd = _canonical_destination(destination, source)
     filename = "{0}_{1}.{2}".format(ps.stem, description, ext)
     im.save(pd / filename, quality=100)
 

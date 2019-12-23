@@ -35,7 +35,7 @@ Whether an explicit destination is specified or not, the output directory will b
 Where an image must be cropped to meet the criteria of a product or service, by default the crop will be performed on both sides of whatever axis is required to match the target aspect ratio. If one side of the art is more important than the other then the `--retain` switch can be used to prevent it from being cropped. Available options are `top`, `bottom`, `left`, and `right`. For example, this command will cause the top of the art to be retained during any cropping:
 
 ```
-prepareprints.py --retain top portrait.png
+prepareprints.py --retain top -- portrait.png
 ```
 
 ### Service Selection
@@ -77,7 +77,7 @@ Printful output can be specified using the `--printful` switch as mentioned abov
 If only specific products are required, the service-specific `--products` switch can be used. It accepts `poster`, `canvas`, and `poster_with_mat` as options, and more than one can be specified. The default, however, is to prepare files for all product types.
 
 ```
-prepareprints.py --products poster poster_with_mat portrait.png
+prepareprints.py --products poster poster_with_mat -- portrait.png
 ```
 
 In addition to limiting the output to specific products, it can be limited to specific sizes of products with the `--sizes` switch. The sizes are specified as `widthxheight`, but always in portrait orientation, even if the art is landscape. The output will still be oriented correctly. The sizes available vary by product, as shown in the following table. Different sizes of posters that have the same aspect ratio only output one file that is suitable for all sizes.
@@ -95,7 +95,7 @@ Posters with mat | Centimeters | Various | 21x30, 30x40, 50x70, 61x91
 Canvases | Inches | Various | 12x12, 12x16, 16x16, 16x20, 18x24, 24x36
 
 ```
-prepareprints.py --products poster --sizes 12x16 12x18 portrait.png
+prepareprints.py --products poster --sizes 12x16 12x18 -- portrait.png
 ```
 
 The default is to prepare files for all product sizes.
