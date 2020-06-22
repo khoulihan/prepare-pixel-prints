@@ -49,7 +49,7 @@ def _rotate(im, ccw):
 
 
 def _scale_by_factor(im, factor):
-    return im.resize((im.size[0] * factor, im.size[1] * factor))
+    return im.resize((im.size[0] * factor, im.size[1] * factor), resample=Image.NEAREST)
 
 # TODO: Use retain parameters to force cropping on a particular axis e.g. if 'left' and 'right' are present then only allow vertical crop?
 # TODO: Adapt this to support reverse ratios, as sometimes it makes more sense to use those e.g. 0.75 vs 1.3333
