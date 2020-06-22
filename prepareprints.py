@@ -62,7 +62,7 @@ def _scale_by_factor(im, factor):
 # TODO: Adapt this to support reverse ratios, as sometimes it makes more sense to use those e.g. 0.75 vs 1.3333
 def _crop_to_ratio(im, ratio, retain=[]):
     retain = [] if not retain else retain
-    
+
     portrait = im.size[0] < im.size[1]
     l = max(im.size)
     s = min(im.size)
@@ -335,7 +335,7 @@ def _parse_arguments():
     return args
 
 
-if __name__ == "__main__":
+def _main():
     args = _parse_arguments()
     try:
         try:
@@ -378,3 +378,7 @@ if __name__ == "__main__":
         # TODO: Maybe track some statistics and print them on exit.
         print()
         sys.exit(0)
+
+
+if __name__ == "__main__":
+    _main()
