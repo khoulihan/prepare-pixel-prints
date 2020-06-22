@@ -18,15 +18,8 @@ def colour(value):
     return parsed
 
 
-def _canonical_destination(destination, source):
-    p = Path(destination)
-    if not p.is_absolute():
-        p = Path(source).parents[0].joinpath(p)
-    return p
-
-
 def _verify_destination(destination, source):
-    p = _canonical_destination(destination, source)
+    p = Path(destination)
     if not p.exists():
         p.mkdir()
     else:
@@ -301,7 +294,7 @@ def _inprnt(im, source, destination, **kwargs):
 
 def _save(im, source, destination, description, ext):
     ps = Path(source)
-    pd = _canonical_destination(destination, source)
+    pd = Path(destination)
     filename = "{0}_{1}.{2}".format(ps.stem, description, ext)
     im.save(pd / filename, quality=100)
 

@@ -10,7 +10,7 @@ License: MIT, see LICENSE for more details.
 
 ## Prerequisites
 
-The script depends on Python 3.6 (though possibly earlier versions of Python 3 will work fine), and the imaging library [Pillow](https://pillow.readthedocs.io/en/stable/index.html).
+The script depends on Python 3.7 (though possibly earlier versions of Python 3 will work fine), and the imaging library [Pillow](https://pillow.readthedocs.io/en/stable/index.html).
 
 ## Usage
 
@@ -22,7 +22,7 @@ prepareprints.py portrait.png
 
 ### Destination
 
-A different destination can be specified with the `--destination` switch. If a relative path is specified, it will be assumed to be relative to the input file location.
+A different destination can be specified with the `--destination` switch.
 
 ```
 prepareprints.py --destination ~/kevin/artprints/portrait portrait.png
