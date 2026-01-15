@@ -8,6 +8,8 @@ Copyright (c) 2019 by Kevin Houlihan
 
 License: MIT, see LICENSE for more details.
 
+**This repository has been [migrated to Codeberg](https://codeberg.org/hyh/prepare-pixel-prints).**
+
 ## Prerequisites
 
 The script depends on Python 3.7 (though possibly earlier versions of Python 3 will work fine), and the imaging library [Pillow](https://pillow.readthedocs.io/en/stable/index.html).
